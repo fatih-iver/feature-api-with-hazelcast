@@ -1,0 +1,2 @@
+hazelcast:
+  cluster-name: feature-api-hazelcast-cluster
