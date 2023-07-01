@@ -22,12 +22,14 @@ public class HazelcastReplicatedStateRepository implements StateRepository {
         FeatureState featureState = replicatedMap.get(featureName);
 
         if (featureState != null) {
+            System.out.println("Feature will be served from Hazelcast: " + featureName);
             return featureState;
         }
 
         featureState = delegate.getFeatureState(feature);
 
         if (featureState != null) {
+            System.out.println("Feature will be cached in Hazelcast: " + featureName);
             replicatedMap.put(featureName, featureState.copy());
         }
 
@@ -37,6 +39,8 @@ public class HazelcastReplicatedStateRepository implements StateRepository {
     @Override
     public void setFeatureState(FeatureState featureState) {
         delegate.setFeatureState(featureState);
-        replicatedMap.put(featureState.getFeature().name(), featureState.copy());
+        String featureName = featureState.getFeature().name();
+        System.out.println("Feature will be cached in Hazelcast: " + featureName);
+        replicatedMap.put(featureName, featureState.copy());
     }
 }
